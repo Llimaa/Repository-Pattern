@@ -6,25 +6,27 @@ namespace RepositoyPattern.Infra
 {
     public class MSSQLServer : IDB
     {
-        private IDbConnection _db;
-        private IInfraConfiguration _dbConfig;
+        SqlConnection con;
+        string strcon;
 
         public MSSQLServer(IInfraConfiguration dbConfig)
         {
-            _dbConfig = dbConfig;
+            strcon = dbConfig.ConnectionString;
         }
 
         public void Dispose()
         {
-            _db.Close();
-            _db.Dispose();
+            con.Close();
+            con.Dispose();
         }
         public IDbConnection GetConnection()
         {
-            if (_db != null)
-                return _db;
-            else
-                return _db = new SqlConnection(_dbConfig.ConnectionString);
+
+            if (con == null || con.State != ConnectionState.Open)
+                con = new SqlConnection(strcon);
+
+            con.Open();
+            return con;
         }
     }
 }
