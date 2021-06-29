@@ -9,7 +9,7 @@ namespace RepositoyPattern.Domain.Entities
     {
         public Employer( string name, string email, string document)
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
             Name = name;
             Email = email;
             Document = document;
