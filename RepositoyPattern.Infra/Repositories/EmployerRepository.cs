@@ -16,7 +16,7 @@ namespace RepositoyPattern.Infra.Repositories
         {
             _db = db;
         }
-  
+
         public async Task<IEnumerable<Employer>> GetAll()
         {
             var sql = "select * from employer";
@@ -27,6 +27,7 @@ namespace RepositoyPattern.Infra.Repositories
                 return employer;
             }
         }
+         
 
         public async Task<Employer> GetById(int id)
         {
@@ -40,16 +41,24 @@ namespace RepositoyPattern.Infra.Repositories
         }
 
 
-        void IEmployerRepository.Add(Employer employer)
+        public void Add(Employer employer)
         {
-            var sql = "insert into employer(name, email, document)" +
-                "values" +
-                "(@Name,@Email,@Document)";
+            var sql = "	INSERT INTO [dbo].[Employer]          " +
+                        "	           ([Id]					  " +
+                        "	           ,[Name]					  " +
+                        "	           ,[Email]					  " +
+                        "	           ,[Document])				  " +
+                        "	     VALUES							  " +
+                        "	           (@Id						  " +
+                        "	           ,@Name					  " +
+                        "	           ,@Email 					  " +
+                        "	           ,@Document)				  ";
 
             using (var dbCon = _db.GetConnection())
             {
                 dbCon.ExecuteAsync(sql, new
                 {
+                    @Id = employer.Id,
                     Name = employer.Name,
                     Email = employer.Email,
                     Document = employer.Document
@@ -67,7 +76,7 @@ namespace RepositoyPattern.Infra.Repositories
 
             using (var dbCon = _db.GetConnection())
             {
-                 dbCon.ExecuteAsync(sql, new
+                dbCon.ExecuteAsync(sql, new
                 {
                     Name = employer.Name,
                     Email = employer.Email,
