@@ -42,8 +42,10 @@ namespace RepositoyPattern.Controllers
             {
                 return BadRequest();
             }
-              _employerRepository.Add(employer);
-            return CreatedAtAction(nameof(GetById), new { id = employer.Id }, employer);
+            var _employer = new Employer(employer.Name, employer.Email, employer.Document);
+           
+            _employerRepository.Add(_employer);
+            return Ok(_employer);
         }
 
         [HttpPut]
